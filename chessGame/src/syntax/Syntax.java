@@ -14,8 +14,8 @@ import java.util.regex.*;
         static String piece = "[KQRBN]";
 
         //Special moves
-        static String castle = "(O-O|O-O-O)";
-        static String check = "(\\+|#)?";
+        static String castle = "(O\\-O|O\\-O\\-O)";
+        static String   check = "(\\+|#)?";
         static String promote = "(=[QRBN])?";
 
         //Pieces moves
@@ -27,7 +27,11 @@ import java.util.regex.*;
 
         static String move = "(" + castle + "|" + pawnMove + "|" + pieceMove + ")";
         static String gameTurn = "(\\d+)\\.\\s+([^\\s]+)(?:\\s+(?!\\d+\\.)([^\\s]+))?"; //turno (por si acaso)
+
+
+
     static boolean accpt = true;
+
      private static void ProveMatch(String match) {
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
          
@@ -53,10 +57,34 @@ import java.util.regex.*;
         if(turnMove.matches(move)){
            return true;
         } else {
-           System.out.println("In turn "+turnNum+", for "+color+" pieces, move "+turnMove+" invalid");
+
+            String[][] errors ={
+                    {".*[^a-h1-8KQRBNx=\\+#O\\-].*", " contain unknown characters"},
+                    {".*[O\\-]+.*", " invalid castle"},
+                    {".*[a-h1-8]+.*",  " has invalid square"},
+                    {".*[O]+.*",  " invalid castle"},
+                    {".*=[^QRBN]+.*",  " has invalid promotion"},
+                    {".*[^KQRBN]+.*",  " has invalid piece"},
+                    {".*", " is invalid"}
+            };
+
+            for(String[] error : errors){
+                if(turnNum.matches(error[0])){
+                    System.out.println("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
+                }
+            }
+
            accpt = false;
            return false;
         }
      }
 
+     public static void main(String[] args) {
+         String match = "1. e4 e5 2. N";
+
+         ProveMatch(match);
+     }
+
 }
+
+
