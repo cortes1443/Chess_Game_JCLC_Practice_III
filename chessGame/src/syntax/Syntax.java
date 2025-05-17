@@ -2,7 +2,7 @@ package syntax;
 
 import java.util.regex.*;
 
- class Syntax {
+ public class Syntax {
 
         //Board
         static String letter = "[a-h]";
@@ -32,7 +32,8 @@ import java.util.regex.*;
 
     static boolean accpt = true;
 
-     static void ProveMatch(String match) {
+     public static void ProveMatch(String match) {
+
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
          
          
@@ -53,7 +54,7 @@ import java.util.regex.*;
 
      }
 
-     private static boolean ProveMove(String turnMove, String turnNum, String color){
+     public static boolean ProveMove(String turnMove, String turnNum, String color){
         if(turnMove.matches(move)){
            return true;
         } else {
@@ -80,11 +81,6 @@ import java.util.regex.*;
         }
      }
 
-     public static void main(String[] args) {
-         String match = "1. e4 d5 2. exd5 Nf6 3. Nc3 Nxd5 4. Bc4 Nxc3 5. bxc3 Nc6";
-
-         ProveMatch(match);
-     }
 
 }
 
