@@ -14,7 +14,7 @@ import java.util.regex.*;
         static String piece = "[KQRBN]";
 
         //Special moves
-        static String castle = "(O\\-O|O\\-O\\-O)";
+        static String castle = "(O-O|O-O-O)";
         static String   check = "(\\+|#)?";
         static String promote = "(=[QRBN])?";
 
@@ -32,7 +32,7 @@ import java.util.regex.*;
 
     static boolean accpt = true;
 
-     private static void ProveMatch(String match) {
+     static void ProveMatch(String match) {
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
          
          
@@ -57,20 +57,21 @@ import java.util.regex.*;
         if(turnMove.matches(move)){
            return true;
         } else {
-
             String[][] errors ={
                     {".*[^a-h1-8KQRBNx=\\+#O\\-].*", " contain unknown characters"},
-                    {".*[O\\-]+.*", " invalid castle"},
-                    {".*[a-h1-8]+.*",  " has invalid square"},
-                    {".*[O]+.*",  " invalid castle"},
+                    {".*[O][^\\-O].*", " invalid castle"},
+                    {".*[i-z]|[9-9]{1,}.*",  " has invalid square"},
                     {".*=[^QRBN]+.*",  " has invalid promotion"},
-                    {".*[^KQRBN]+.*",  " has invalid piece"},
+                    {".*x.*",  " invalid capture"},
+                    {".*[^KQRBN](" + letter + "|" + number + "|" + square + ")?x?\" + square.*",  " has invalid piece"},
                     {".*", " is invalid"}
             };
 
             for(String[] error : errors){
                 if(turnNum.matches(error[0])){
                     System.out.println("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
+                    accpt = false;
+                    return false;
                 }
             }
 
@@ -80,7 +81,7 @@ import java.util.regex.*;
      }
 
      public static void main(String[] args) {
-         String match = "1. e4 e5 2. N";
+         String match = "1. e4 d5 2. exd5 Nf6 3. Nc3 Nxd5 4. Bc4 Nxc3 5. bxc3 Nc6";
 
          ProveMatch(match);
      }
