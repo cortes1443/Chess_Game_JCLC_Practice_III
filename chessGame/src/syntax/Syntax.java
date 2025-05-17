@@ -2,7 +2,7 @@ package syntax;
 
 import java.util.regex.*;
 
- class Syntax {
+ public class Syntax {
 
         //Board
         static String letter = "[a-h]";
@@ -32,7 +32,7 @@ import java.util.regex.*;
 
     static boolean accpt = true;
 
-     private static void ProveMatch(String match) {
+     public static void ProveMatch(String match) {
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
          
          
