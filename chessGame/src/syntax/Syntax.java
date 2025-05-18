@@ -31,8 +31,9 @@ import java.util.regex.*;
 
 
     static boolean accpt = true;
+    static boolean foundAny = false;
 
-     public static void ProveMatch(String match) {
+     public static void proveMatch(String match) {
 
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
          
@@ -43,19 +44,22 @@ import java.util.regex.*;
             String white = matchTurns.group(2);
             String black = matchTurns.group(3); // can be null
             
-            ProveMove(white, turn, "white");
+            proveMove(white, turn, "white");
             if(black != null){
-                ProveMove(black, turn, "black");
+                proveMove(black, turn, "black");
             }
          }
-         if(accpt){
+         if(accpt && foundAny) {
              System.out.println("Valid match");
+         }else if(!foundAny){
+             System.out.println("Please enter a valid match");
          }
 
      }
 
-     public static boolean ProveMove(String turnMove, String turnNum, String color){
+     public static boolean proveMove(String turnMove, String turnNum, String color){
         if(turnMove.matches(move)){
+            foundAny = true;
            return true;
         } else {
             String[][] errors ={
@@ -64,7 +68,7 @@ import java.util.regex.*;
                     {".*[i-z]|[9-9]{1,}.*",  " has invalid square"},
                     {".*=[^QRBN]+.*",  " has invalid promotion"},
                     {".*x.*",  " invalid capture"},
-                    {".*[^KQRBN](" + letter + "|" + number + "|" + square + ")?x?\" + square.*",  " has invalid piece"},
+                    {".*[^KQRBN].?(" + letter + "|" + number + "|" + square + ")?x?\" + square.*",  " has invalid piece"},
                     {".*", " is invalid"}
             };
 
