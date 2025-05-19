@@ -1,5 +1,6 @@
 package syntax;
 
+import javax.swing.*;
 import java.util.regex.*;
 
  public class Syntax {
@@ -51,8 +52,21 @@ import java.util.regex.*;
          }
          if(accpt && foundAny) {
              System.out.println("Valid match");
+             JOptionPane.showMessageDialog(
+                     null,
+                     "Valid match",
+                     "Valid match",
+                     JOptionPane.WARNING_MESSAGE
+             );
          }else if(!foundAny){
              System.out.println("Please enter a valid match");
+             JOptionPane.showMessageDialog(
+                     null,
+                     "Please enter a valid match.",
+                     "match",
+                     JOptionPane.WARNING_MESSAGE
+             );
+
          }
 
      }
@@ -75,6 +89,13 @@ import java.util.regex.*;
             for(String[] error : errors){
                 if(turnNum.matches(error[0])){
                     System.out.println("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
+                    String mistake = ("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
+                    JOptionPane.showMessageDialog(
+                            null,
+                            mistake,
+                            "error",
+                            JOptionPane.WARNING_MESSAGE
+                    );
                     accpt = false;
                     return false;
                 }
