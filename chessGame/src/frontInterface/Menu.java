@@ -14,50 +14,91 @@ public class Menu {
 
 
     public Menu(JFrame frame) {
-        main = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 170, 10, 170); // Espaciado entre componentes
-        // ----------- Línea 1: Título ---------------
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 3;
-        gbc.anchor = GridBagConstraints.CENTER;
-        main.add(new JLabel("Welcome to chessChecked"), gbc);
+        // Panel principal (contenedor de los tres JPanels)
+        main = new JPanel();
+        main.setLayout(new BorderLayout());
+        main.setBackground(Color.WHITE);
 
-        // ----------- Línea 2: Labels ---------------
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 10;
-        gbc.anchor = GridBagConstraints.WEST;
-        main.add(new JLabel("Enter chess game in SAN"), gbc);
+// ---------- JPanel1: Encabezado con título ----------
+        JPanel panel1 = new JPanel();
+        panel1.setBackground(Color.decode("#212121"));
+        panel1.setMaximumSize(new Dimension(50,40));
+        JLabel titleLabel = new JLabel("Welcome to ChessChecked");
+        titleLabel.setFont(new Font("Cooper Black", Font.ITALIC, 16));
+        titleLabel.setForeground(Color.WHITE);
+        panel1.add(titleLabel);
 
-        gbc.gridx = 2;
-        gbc.anchor = GridBagConstraints.EAST;
-        main.add(new JLabel("Binary tree for the game"), gbc);
+// ---------- JPanel2: Columna izquierda ----------
+JPanel panel2 = new JPanel();
+panel2.setBackground(Color.decode("#2f2f2f"));
+panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 
-        // ----------- Línea 3: TextField y JButton1 ---------------
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 20;
-        gbc.anchor = GridBagConstraints.WEST;
-        textField1 = new JTextField(25);
-        textField1.setPreferredSize(new Dimension(300, 50));
-        main.add(textField1, gbc);
+Box box2 = Box.createVerticalBox();
+box2.add(Box.createVerticalGlue());
 
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        button1 = new JButton("generate tree");
-        button1.setBackground(new Color(173, 216, 230)); // Light blue
-        main.add(button1, gbc);
+JLabel labelSan = new JLabel("Enter chess game in SAN:");
+labelSan.setForeground(Color.WHITE);
+labelSan.setFont(new Font("Cooper Black", Font.PLAIN, 16));
+labelSan.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // ----------- Línea 4: JButton2 centrado abajo ---------------
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        button2 = new JButton("verify");
-        button2.setBackground(new Color(173, 216, 230)); // Light blue
-        main.add(button2, gbc);
+JTextField textField1 = new JTextField(25);
+textField1.setMaximumSize(new Dimension(300, 50));
+textField1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+ImageIcon generateTreePNG = new ImageIcon("chessGame/src/frontInterface/resources/buttons/verify-button.png");
+JButton button2 = new JButton(new ImageIcon(generateTreePNG.getImage().getScaledInstance(168, 60, Image.SCALE_SMOOTH)));
+button2.setBorderPainted(false);
+button2.setContentAreaFilled(false);
+button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+box2.add(labelSan);
+box2.add(Box.createVerticalStrut(20));
+box2.add(textField1);
+box2.add(Box.createVerticalStrut(20));
+box2.add(button2);
+box2.add(Box.createVerticalGlue());
+
+panel2.add(box2);
+
+// ---------- JPanel3: Columna derecha ----------
+JPanel panel3 = new JPanel();
+panel3.setBackground(Color.decode("#2f2f2f"));
+panel3.setLayout(new BoxLayout(panel3, BoxLayout.Y_AXIS));
+
+Box box3 = Box.createVerticalBox();
+box3.add(Box.createVerticalGlue());
+
+JLabel labelTree = new JLabel("Binary tree for the game");
+labelTree.setForeground(Color.WHITE);
+labelTree.setFont(new Font("Cooper Black", Font.PLAIN, 16));
+labelTree.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+ImageIcon verifyPNG = new ImageIcon("chessGame/src/frontInterface/resources/buttons/GenerateTree-button.png");
+JButton button1 = new JButton(new ImageIcon(verifyPNG.getImage().getScaledInstance(168, 60, Image.SCALE_SMOOTH)));
+button1.setBorderPainted(false);
+button1.setContentAreaFilled(false);
+button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+box3.add(labelTree);
+box3.add(Box.createVerticalStrut(60));
+box3.add(button1);
+box3.add(Box.createVerticalGlue());
+
+panel3.add(box3);
+
+
+// ---------- Panel central que contiene panel2 y panel3 ----------
+        JPanel centerPanel = new JPanel();
+	centerPanel.setBackground(Color.decode("#3a3d3d"));
+        centerPanel.setLayout(new GridLayout(1, 2));
+        centerPanel.add(panel2);
+        centerPanel.add(panel3);
+
+// ---------- Agregamos todo al panel principal ----------
+        main.add(panel1, BorderLayout.NORTH);
+        main.add(Box.createHorizontalStrut(5));
+        main.add(centerPanel, BorderLayout.CENTER);
+
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,10 +144,11 @@ public class Menu {
         frame.setContentPane(menuInstance.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        //frame.setLocationRelativeTo(null);
+        //frame.setResizable(false);
         frame.setSize(1000,500);
         frame.setVisible(true);
+        MessageStyles.applyGlobalStyle();
 
     }
 }

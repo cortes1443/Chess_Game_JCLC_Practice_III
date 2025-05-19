@@ -56,7 +56,7 @@ import java.util.regex.*;
                      null,
                      "Valid match",
                      "Valid match",
-                     JOptionPane.WARNING_MESSAGE
+                     JOptionPane.INFORMATION_MESSAGE
              );
          }else if(!foundAny){
              System.out.println("Please enter a valid match");
@@ -64,7 +64,7 @@ import java.util.regex.*;
                      null,
                      "Please enter a valid match.",
                      "match",
-                     JOptionPane.WARNING_MESSAGE
+                     JOptionPane.ERROR_MESSAGE
              );
 
          }
@@ -74,6 +74,7 @@ import java.util.regex.*;
      public static boolean proveMove(String turnMove, String turnNum, String color){
         if(turnMove.matches(move)){
             foundAny = true;
+            accpt = true;
            return true;
         } else {
             String[][] errors ={
