@@ -37,8 +37,7 @@ import java.util.regex.*;
      public static void proveMatch(String match) {
 
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
-         
-         
+
 
          while (matchTurns.find() && accpt) {
             String turn = matchTurns.group(1);
@@ -69,6 +68,8 @@ import java.util.regex.*;
 
          }
 
+         accpt = true;
+        foundAny = false;
      }
 
      public static boolean proveMove(String turnMove, String turnNum, String color){
@@ -78,17 +79,17 @@ import java.util.regex.*;
            return true;
         } else {
             String[][] errors ={
-                    {".*[^a-h1-8KQRBNx=\\+#O\\-].*", " contain unknown characters"},
-                    {".*[O][^\\-O].*", " invalid castle"},
                     {".*[i-z]|[9-9]{1,}.*",  " has invalid square"},
+                    {".*[^KQRBN].?(" + letter + "|" + number + "|" + square + ")?x?" + square+ ".*",  " has invalid piece"},
+                    {".*[O][^\\-O].*", " invalid castle"},
                     {".*=[^QRBN]+.*",  " has invalid promotion"},
                     {".*x.*",  " invalid capture"},
-                    {".*[^KQRBN].?(" + letter + "|" + number + "|" + square + ")?x?\" + square.*",  " has invalid piece"},
+                    {".*[^a-h1-8KQRBNx=\\+#O\\-].*", " contain unknown characters"},
                     {".*", " is invalid"}
             };
 
             for(String[] error : errors){
-                if(turnNum.matches(error[0])){
+                if(turnMove.matches(error[0])){
                     System.out.println("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
                     String mistake = ("In turn "+turnNum+", for "+color+" pieces, move "+turnMove + error[1]);
                     JOptionPane.showMessageDialog(
@@ -97,6 +98,7 @@ import java.util.regex.*;
                             "error",
                             JOptionPane.WARNING_MESSAGE
                     );
+                    foundAny = true;
                     accpt = false;
                     return false;
                 }
