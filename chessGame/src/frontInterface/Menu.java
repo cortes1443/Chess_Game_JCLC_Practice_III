@@ -115,7 +115,7 @@ panel3.add(box3);
                     // Mostrar una ventana emergente si el campo está vacío
                     JOptionPane.showMessageDialog(
                             null,
-                            "Por favor, ingrese un valor en el campo de texto.",
+                            "Please fill the text field.",
                             "Campo vacío",
                             JOptionPane.WARNING_MESSAGE
                     );
