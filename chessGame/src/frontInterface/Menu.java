@@ -1,10 +1,15 @@
 package frontInterface;
 
+import syntax.MoveNode;
+import syntax.Syntax;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import static syntax.Syntax.proveMatch;
+
 
 public class Menu {
     private JPanel main;
@@ -102,9 +107,13 @@ panel3.add(box3);
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Tree treeFrame = new Tree();
-                treeFrame.setVisible(true);
-
+                String game =  textField1.getText();
+                //proveMatch(game);
+                if(proveMatch(game)){
+                    MoveNode root = Syntax.buildTreeFromMatch(game);
+                    // Mostrar árbol
+                    SwingUtilities.invokeLater(() -> ChessTreeViewer.show(root));
+                }
             }
         });
         button2.addActionListener(new  ActionListener() {

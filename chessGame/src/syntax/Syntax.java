@@ -34,7 +34,7 @@ import java.util.regex.*;
     static boolean accpt = true;
     static boolean foundAny = false;
 
-     public static void proveMatch(String match) {
+     public static boolean proveMatch(String match) {
 
          Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
 
@@ -56,7 +56,9 @@ import java.util.regex.*;
                      "Valid match",
                      "Valid match",
                      JOptionPane.INFORMATION_MESSAGE
+
              );
+             return true;
          }else if(!foundAny){
              System.out.println("Please enter a valid match");
              JOptionPane.showMessageDialog(
@@ -70,6 +72,7 @@ import java.util.regex.*;
 
          accpt = true;
         foundAny = false;
+        return false;
      }
 
      public static boolean proveMove(String turnMove, String turnNum, String color){
@@ -79,7 +82,7 @@ import java.util.regex.*;
            return true;
         } else {
             String[][] errors ={
-                    {".*[i-z]|[9-9]{1,}.*",  " has invalid square"},
+                    {".*([i-z]|[9-9]{1,}).*",  " has invalid square"},
                     {".*[^KQRBN].?(" + letter + "|" + number + "|" + square + ")?x?" + square+ ".*",  " has invalid piece"},
                     {".*[O][^\\-O].*", " invalid castle"},
                     {".*=[^QRBN]+.*",  " has invalid promotion"},
@@ -108,6 +111,52 @@ import java.util.regex.*;
            return false;
         }
      }
+
+public static MoveNode buildTreeFromMatch(String match) {
+    Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
+    MoveNode root = new MoveNode("Partida");
+    MoveNode current = root;
+
+    while (matchTurns.find()) {
+        String turn = matchTurns.group(1);
+        String white = matchTurns.group(2);
+        String black = matchTurns.group(3); // puede ser null
+
+        MoveNode whiteNode = null;
+        MoveNode blackNode = null;
+
+        if (white != null && proveMove(white, turn, "white")) {
+            whiteNode = new MoveNode(white);
+        }
+        if (black != null && proveMove(black, turn, "black")) {
+            blackNode = new MoveNode(black);
+        }
+
+        // solo agregar nodos válidos
+        if (whiteNode != null || blackNode != null) {
+            MoveNode turnNode = new MoveNode("Turn " + turn);
+            turnNode.left = whiteNode;
+            turnNode.right = blackNode;
+
+            // Agrega este turno como hijo izquierdo o derecho del árbol principal
+            if (current.left == null) {
+                current.left = turnNode;
+            } else if (current.right == null) {
+                current.right = turnNode;
+            } else {
+                // Si ya tiene dos hijos, baja al siguiente disponible (simple ejemplo)
+                current = current.left != null ? current.left : current.right;
+                if (current.left == null) {
+                    current.left = turnNode;
+                } else {
+                    current.right = turnNode;
+                }
+            }
+        }
+    }
+    return root;
+}
+
 
 
 }
