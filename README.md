@@ -23,7 +23,7 @@ This tool is useful for quickly analyzing the structure of a chess game and ensu
 - Binary Tree for structural visualization
 
 ---
-##Video 
+## Video 
 
 https://youtu.be/9zTOl2m27OE
 
