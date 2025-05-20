@@ -1,7 +1,10 @@
 package syntax;
 
 import javax.swing.*;
-import java.util.regex.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
  public class Syntax {
 
@@ -112,50 +115,57 @@ import java.util.regex.*;
         }
      }
 
-public static MoveNode buildTreeFromMatch(String match) {
-    Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
-    MoveNode root = new MoveNode("Partida");
-    MoveNode current = root;
+     public static MoveNode buildTreeFromMatch(String match) {
+         Matcher matchTurns = Pattern.compile(gameTurn).matcher(match);
+         MoveNode root = new MoveNode("Partida");
 
-    while (matchTurns.find()) {
-        String turn = matchTurns.group(1);
-        String white = matchTurns.group(2);
-        String black = matchTurns.group(3); // puede ser null
+         while (matchTurns.find()) {
+             String turn = matchTurns.group(1);
+             String white = matchTurns.group(2);
+             String black = matchTurns.group(3); // puede ser null
 
-        MoveNode whiteNode = null;
-        MoveNode blackNode = null;
+             MoveNode whiteNode = null;
+             MoveNode blackNode = null;
 
-        if (white != null && proveMove(white, turn, "white")) {
-            whiteNode = new MoveNode(white);
-        }
-        if (black != null && proveMove(black, turn, "black")) {
-            blackNode = new MoveNode(black);
-        }
+             if (white != null && proveMove(white, turn, "white")) {
+                 whiteNode = new MoveNode(white);
+             }
+             if (black != null && proveMove(black, turn, "black")) {
+                 blackNode = new MoveNode(black);
+             }
 
-        // solo agregar nodos válidos
-        if (whiteNode != null || blackNode != null) {
-            MoveNode turnNode = new MoveNode("Turn " + turn);
-            turnNode.left = whiteNode;
-            turnNode.right = blackNode;
+             // Insertar en el árbol binario
+             insertIntoTree(root, whiteNode, blackNode);
+         }
 
-            // Agrega este turno como hijo izquierdo o derecho del árbol principal
-            if (current.left == null) {
-                current.left = turnNode;
-            } else if (current.right == null) {
-                current.right = turnNode;
-            } else {
-                // Si ya tiene dos hijos, baja al siguiente disponible (simple ejemplo)
-                current = current.left != null ? current.left : current.right;
-                if (current.left == null) {
-                    current.left = turnNode;
-                } else {
-                    current.right = turnNode;
-                }
-            }
-        }
-    }
-    return root;
-}
+         return root;
+     }
+
+     // Método auxiliar para insertar en el siguiente lugar disponible
+     private static void insertIntoTree(MoveNode current, MoveNode whiteNode, MoveNode blackNode) {
+         // BFS para encontrar el siguiente par de nodos disponibles
+         Queue<MoveNode> queue = new LinkedList<>();
+         queue.add(current);
+
+         while (!queue.isEmpty()) {
+             MoveNode node = queue.poll();
+
+             if (node.left == null && whiteNode != null) {
+                 node.left = whiteNode;
+                 if (blackNode != null) node.right = blackNode;
+                 return;
+             } else if (node.right == null && node.left != null) {
+                 if (blackNode != null) {
+                     node.right = blackNode;
+                     return;
+                 }
+             }
+
+             if (node.left != null) queue.add(node.left);
+             if (node.right != null) queue.add(node.right);
+         }
+     }
+
 
 
 
